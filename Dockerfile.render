@@ -1,0 +1,9 @@
+FROM falkordb/falkordb:v4.18.11
+USER root
+RUN apt-get update && apt-get install -y --no-install-recommends python3 python3-venv && rm -rf /var/lib/apt/lists/*
+WORKDIR /app
+COPY requirements.txt .
+RUN python3 -m venv /opt/venv && /opt/venv/bin/pip install --no-cache-dir -r requirements.txt
+COPY app.py memory.py index.html start-render.sh ./
+ENV FALKOR_HOST=127.0.0.1 FALKOR_PORT=6379
+ENTRYPOINT ["bash", "/app/start-render.sh"]
