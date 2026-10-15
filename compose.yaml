@@ -1,0 +1,23 @@
+services:
+  graph:
+    image: falkordb/falkordb:v4.18.11
+    command: ["redis-server", "--loadmodule", "/var/lib/falkordb/bin/falkordb.so", "--appendonly", "yes"]
+    volumes:
+      - graph-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+  web:
+    build: .
+    environment:
+      FALKOR_HOST: graph
+      FALKOR_PORT: "6379"
+    ports:
+      - "127.0.0.1:8080:8080"
+    depends_on:
+      graph:
+        condition: service_healthy
+volumes:
+  graph-data:
