@@ -1,0 +1,4 @@
+falkordb==1.6.0
+Flask==3.1.1
+pytest==8.3.5
+gunicorn==23.0.0
